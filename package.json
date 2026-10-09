@@ -1,6 +1,6 @@
 {
   "name": "@wax-io/atomic-pinner",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Pin the IPFS content referenced by AtomicAssets NFTs (WAX and other Antelope chains) to Pinata or your own IPFS node, with resumable progress and rate limiting.",
   "license": "MIT",
   "private": true,
@@ -8,6 +8,23 @@
   "engines": {
     "node": ">=20.0.0"
   },
+  "bin": {
+    "atomic-pinner": "dist/cli.js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/worldwide-asset-exchange/atomic-pinner.git"
@@ -20,6 +37,7 @@
     "ipfs",
     "pinning",
     "pinata",
+    "kubo",
     "nft",
     "atomicassets",
     "wax",
@@ -30,20 +48,23 @@
     "access": "public"
   },
   "scripts": {
-    "start": "tsx src/main.ts",
+    "start": "tsx src/cli.ts",
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
     "test": "vitest",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
+    "docs": "tsx scripts/update-docs.ts",
+    "docs:check": "tsx scripts/update-docs.ts --check",
     "prettier": "prettier -w .",
-    "prettier:check": "prettier -c ."
+    "prettier:check": "prettier -c .",
+    "prepack": "yarn build"
   },
   "dependencies": {
-    "@wharfkit/antelope": "^1.0.7",
-    "@wharfkit/atomicassets": "^1.2.1",
     "cli-progress": "^3.12.0",
     "dotenv": "^17.2.0",
-    "lowdb": "^7.0.1"
+    "lowdb": "^7.0.1",
+    "zod": "^3.25.0"
   },
   "devDependencies": {
     "@types/cli-progress": "^3.11.6",

@@ -1,4 +1,5 @@
-// Extract IPFS hashes from various data sources for pinning to Pinata
+// Extract IPFS CIDs from AtomicAssets asset data and token metadata.
+import { silentLogger, type Logger } from '../logging/logger.js';
 
 const ipfsRe = new RegExp(
   '^(Qm[1-9A-HJ-NP-Za-km-z]{44,}|b[A-Za-z2-7]{58,}|B[A-Z2-7]{58,}|z[1-9A-HJ-NP-Za-km-z]{48,}|F[0-9A-F]{50,}).*'
@@ -37,7 +38,7 @@ function extractIPFSHash(url: string): string | null {
 
 // Helper function to recursively extract IPFS hashes from any object
 function extractHashesFromObject(
-  obj: any,
+  obj: unknown,
   hashes: Set<string>,
   maxDepth: number = 5,
   currentDepth: number = 0
@@ -65,39 +66,29 @@ function extractHashesFromObject(
 }
 
 // Extract all IPFS hashes from AtomicAssets NFT data
-export function extractHashesFromAsset(asset: any): string[] {
+export function extractHashesFromAsset(asset: unknown): string[] {
   if (!asset) {
     return [];
   }
 
+  const a = asset as Record<string, unknown> & {
+    template?: { immutable_data?: unknown } | null;
+  };
   const hashSet = new Set<string>();
 
-  // Extract from asset.data (mutable data)
-  if (asset.data) {
-    extractHashesFromObject(asset.data, hashSet);
-  }
-
-  // Extract from template immutable data
-  if (asset.template?.immutable_data) {
-    extractHashesFromObject(asset.template.immutable_data, hashSet);
-  }
-
-  // Extract from mutable data if available
-  if (asset.mutable_data) {
-    extractHashesFromObject(asset.mutable_data, hashSet);
-  }
-
-  // Extract from backed tokens data if available
-  if (asset.backed_tokens) {
-    extractHashesFromObject(asset.backed_tokens, hashSet);
-  }
+  // data = merged immutable + mutable data; template immutable_data covers template-level media.
+  if (a.data) extractHashesFromObject(a.data, hashSet);
+  if (a.template?.immutable_data)
+    extractHashesFromObject(a.template.immutable_data, hashSet);
+  if (a.mutable_data) extractHashesFromObject(a.mutable_data, hashSet);
+  if (a.backed_tokens) extractHashesFromObject(a.backed_tokens, hashSet);
 
   // Convert Set back to array for compatibility
   return Array.from(hashSet);
 }
 
 // Extract IPFS hashes from token metadata
-export function extractHashesFromToken(tokenMetadata: any): string[] {
+export function extractHashesFromToken(tokenMetadata: unknown): string[] {
   const hashSet = new Set<string>();
 
   // Use the same dynamic extraction for token metadata
@@ -107,20 +98,28 @@ export function extractHashesFromToken(tokenMetadata: any): string[] {
 }
 
 // Fetch token metadata from IPFS and extract all nested hashes
+export interface FetchTokenHashesDeps {
+  fetch?: typeof globalThis.fetch;
+  logger?: Logger;
+}
+
 export async function fetchAndExtractTokenHashes(
-  metadataUrl: string
+  metadataUrl: string,
+  deps: FetchTokenHashesDeps = {}
 ): Promise<{ metadataHash: string | null; nestedHashes: string[] }> {
+  const logger = deps.logger ?? silentLogger;
+  const fetchImpl = deps.fetch ?? globalThis.fetch;
   const metadataHash = extractIPFSHash(metadataUrl);
   const nestedHashes: string[] = [];
 
   if (!metadataHash) {
-    console.warn(`No IPFS hash found in metadata URL: ${metadataUrl}`);
+    logger.warn('No IPFS CID in token metadata URL', { metadataUrl });
     return { metadataHash: null, nestedHashes: [] };
   }
 
   try {
     // Fetch the metadata JSON from IPFS
-    const response = await fetch(metadataUrl);
+    const response = await fetchImpl(metadataUrl);
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
@@ -131,13 +130,12 @@ export async function fetchAndExtractTokenHashes(
     const extractedHashes = extractHashesFromToken(metadata);
     nestedHashes.push(...extractedHashes);
 
-    console.log(
-      `Metadata ${metadataHash}: found ${nestedHashes.length} nested IPFS hashes`
-    );
-  } catch (error: any) {
-    console.warn(
-      `Failed to fetch token metadata from ${metadataUrl}: ${error.message}`
-    );
+    logger.debug('Token metadata fetched', {
+      metadataHash,
+      nested: nestedHashes.length,
+    });
+  } catch (error) {
+    logger.warn('Failed to fetch token metadata', { metadataUrl, error });
   }
 
   return { metadataHash, nestedHashes };

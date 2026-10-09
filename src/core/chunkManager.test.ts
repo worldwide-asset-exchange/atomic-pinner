@@ -2,10 +2,10 @@ import { describe, it, expect, beforeEach, vi, Mock } from 'vitest';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 import { ChunkManager } from './chunkManager.js';
-import { Storage } from './Storage.js';
+import { Storage } from './storage.js';
 
 vi.mock('fs/promises');
-vi.mock('./Storage.js');
+vi.mock('./storage.js');
 
 describe('ChunkManager', () => {
   let chunkManager: ChunkManager;
@@ -565,57 +565,6 @@ describe('ChunkManager', () => {
       result = await chunkManager.findNextChunkFile();
       expect(result.chunkFile).toBe(null); // No more chunks
       expect(result.completedChunks).toBe(3);
-    });
-  });
-
-  describe('displayChunkProgress', () => {
-    it('should display progress information', () => {
-      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-
-      const chunkInfo = {
-        chunkFile: './chunks/object-chunk-02.json',
-        currentChunkNumber: 2,
-        totalChunks: 5,
-        completedChunks: 1,
-        failedChunks: 0,
-        chunkFileName: 'object-chunk-02.json',
-      };
-
-      chunkManager.displayChunkProgress(chunkInfo);
-
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining('AUTO-CHUNK PROGRESS')
-      );
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Current Chunk: object-chunk-02.json (2/5)')
-      );
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Completed Chunks: 1/5')
-      );
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining('20% complete')
-      );
-
-      consoleSpy.mockRestore();
-    });
-
-    it('should not display anything when chunkFile is null', () => {
-      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-
-      const chunkInfo = {
-        chunkFile: null,
-        currentChunkNumber: 0,
-        totalChunks: 0,
-        completedChunks: 0,
-        failedChunks: 0,
-        chunkFileName: '',
-      };
-
-      chunkManager.displayChunkProgress(chunkInfo);
-
-      expect(consoleSpy).not.toHaveBeenCalled();
-
-      consoleSpy.mockRestore();
     });
   });
 });

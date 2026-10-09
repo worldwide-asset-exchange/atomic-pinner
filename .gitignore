@@ -26,3 +26,6 @@ confirmed-pinned-hashes.json
 coverage
 reports
 chunks
+
+# Build output
+dist

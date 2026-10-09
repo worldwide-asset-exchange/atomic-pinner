@@ -1,21 +1,16 @@
 import { defineConfig } from 'vitest/config';
-import path from 'path';
 
 export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
-    include: ['src/**/*.test.ts', 'src/**/*.spec.ts', 'tests/**/*.test.ts'],
+    include: ['src/**/*.test.ts', 'tests/**/*.test.ts'],
+    setupFiles: ['./tests/setup.ts'],
     coverage: {
       provider: 'v8',
-      reporter: ['text', 'json', 'html'],
-      exclude: ['node_modules', 'src/**/*.test.ts', 'src/**/*.spec.ts'],
-    },
-    setupFiles: ['./tests/setup.ts'],
-  },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
+      reporter: ['text', 'json-summary', 'html'],
+      include: ['src/**/*.ts'],
+      exclude: ['src/**/*.test.ts', 'src/index.ts'],
     },
   },
 });

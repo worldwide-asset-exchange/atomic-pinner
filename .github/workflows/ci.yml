@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   checks:
-    name: typecheck · format · test
+    name: typecheck · format · docs · test · build
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -29,7 +29,15 @@ jobs:
 
       - run: yarn prettier:check
 
+      - name: Generated docs are current
+        run: yarn docs:check
+
       - run: yarn test:coverage
+
+      - run: yarn build
+
+      - name: CLI starts
+        run: node dist/cli.js --version && node dist/cli.js --help > /dev/null
 
       - name: Upload coverage report
         if: matrix.node == 20
