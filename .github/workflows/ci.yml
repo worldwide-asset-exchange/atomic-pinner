@@ -46,3 +46,37 @@ jobs:
           name: coverage
           path: coverage/
           retention-days: 7
+
+  integration:
+    name: integration · kubo
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: yarn
+
+      - run: yarn install --frozen-lockfile
+
+      - name: Start Kubo
+        run: |
+          docker run -d --name kubo -p 5001:5001 -p 8080:8080 \
+            -v "$PWD/tests/integration/kubo-init:/container-init.d:ro" ipfs/kubo:v0.32.1
+          for i in $(seq 1 60); do
+            curl -sf -X POST http://127.0.0.1:5001/api/v0/id > /dev/null && exit 0
+            sleep 1
+          done
+          echo "Kubo did not become ready" >&2
+          docker logs kubo
+          exit 1
+
+      - run: yarn test:integration
+        env:
+          KUBO_API_URL: http://127.0.0.1:5001
+          KUBO_GATEWAY_URL: http://127.0.0.1:8080
+
+      - name: Kubo logs
+        if: failure()
+        run: docker logs kubo

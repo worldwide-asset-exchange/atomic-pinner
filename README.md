@@ -115,6 +115,7 @@ run with a message that names the variable.
 | `IPFS_API_URL`               | `http://127.0.0.1:5001`                                          | Kubo RPC API. Used by the kubo provider.                                                                                                           |
 | `IPFS_GATEWAY_URL`           | `http://127.0.0.1:8080`                                          | Gateway of your Kubo node. Tried first for existence checks when the kubo provider is selected.                                                    |
 | `IPFS_VERIFICATION_GATEWAYS` | `https://gateway.pinata.cloud,https://ipfs.io,https://dweb.link` | Comma-separated gateways tried in order to confirm a CID is retrievable before pinning. A CID is only treated as missing when every gateway fails. |
+| `IPFS_VERIFY_TIMEOUT_MS`     | `20000`                                                          | Timeout for one gateway request when checking that a CID is retrievable.                                                                           |
 | `PIN_RETRIES`                | `3`                                                              | Attempts per pin request before the CID is recorded as failed.                                                                                     |
 
 #### Rate limiting

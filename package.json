@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "description": "Pin the IPFS content referenced by AtomicAssets NFTs (WAX and other Antelope chains) to Pinata or your own IPFS node, with resumable progress and rate limiting.",
   "license": "MIT",
-  "private": true,
+  "private": false,
   "type": "module",
   "engines": {
     "node": ">=20.0.0"
@@ -54,6 +54,7 @@
     "test": "vitest",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
+    "test:integration": "vitest run --config vitest.integration.config.ts",
     "docs": "tsx scripts/update-docs.ts",
     "docs:check": "tsx scripts/update-docs.ts --check",
     "prettier": "prettier -w .",

@@ -253,6 +253,13 @@ export const configSpec = {
         'Comma-separated gateways tried in order to confirm a CID is retrievable before pinning. A CID is only treated as missing when every gateway fails.',
       aliases: ['IPFS_VERIFICATION_GATEWAY'],
     }),
+    verifyTimeoutMs: int(
+      'IPFS_VERIFY_TIMEOUT_MS',
+      20000,
+      1000,
+      120000,
+      'Timeout for one gateway request when checking that a CID is retrievable.'
+    ),
     pinRetries: int(
       'PIN_RETRIES',
       3,

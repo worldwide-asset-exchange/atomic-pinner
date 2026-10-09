@@ -70,7 +70,7 @@ export function createVerifier(config: Config, deps: IpfsDeps): HashVerifier {
     deps.fetch ??
     createRetryFetch({
       retries: 2,
-      timeoutMs: 20000,
+      timeoutMs: config.provider.verifyTimeoutMs,
       shouldRetryStatus: () => false,
     });
   const gateways =
