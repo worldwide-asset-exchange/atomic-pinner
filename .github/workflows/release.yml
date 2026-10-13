@@ -3,7 +3,7 @@ name: Release
 # Cut a release by pushing a SemVer tag that matches package.json:
 #   yarn version --new-version 0.3.0   # bumps package.json and creates the tag
 #   git push --follow-tags
-# Publishes @wax-io/atomic-pinner to npm (when NPM_TOKEN is configured) and a multi-arch
+# Publishes @waxio/atomic-pinner to npm (when NPM_TOKEN is configured) and a multi-arch
 # image to ghcr.io/worldwide-asset-exchange/atomic-pinner.
 
 on:

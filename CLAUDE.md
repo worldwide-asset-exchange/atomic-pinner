@@ -10,7 +10,7 @@ them to Pinata or a Kubo node. Each run processes one chunk (or one targets file
 `progress.json` and `confirmed-pinned-hashes.json` makes runs resumable and idempotent.
 
 Public repo `github.com/worldwide-asset-exchange/atomic-pinner`, default branch `main`. npm name
-`@wax-io/atomic-pinner` (still `private: true` until the first release). The internal GitLab repo
+`@waxio/atomic-pinner` (the public `@waxio` scope, shared with `@waxio/waxjs`). The internal GitLab repo
 `wax/pin-wax-ipfs` is the deployment wrapper, not a mirror.
 
 ## Commands

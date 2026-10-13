@@ -1,7 +1,7 @@
 /**
  * Programmatic API. The CLI is a thin wrapper over these exports.
  *
- *   import { loadConfig, createOrchestrator } from '@wax-io/atomic-pinner';
+ *   import { loadConfig, createOrchestrator } from '@waxio/atomic-pinner';
  *   const result = await createOrchestrator(loadConfig()).run();
  */
 export { loadConfig, redactConfig, ConfigError } from './config/load.js';

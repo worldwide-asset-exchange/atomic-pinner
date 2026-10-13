@@ -220,7 +220,7 @@ requests for other services are welcome.
 The CLI is a thin wrapper over an exported API:
 
 ```ts
-import { loadConfig, createOrchestrator } from '@wax-io/atomic-pinner';
+import { loadConfig, createOrchestrator } from '@waxio/atomic-pinner';
 
 const config = loadConfig({ overrides: { processing: { dryRun: true } } });
 const result = await createOrchestrator(config).run();
@@ -253,7 +253,7 @@ gateway verification), `src/atomic` (API client), `src/notify` (webhooks), `src/
 
 ## Roadmap
 
-- Publish to npm (`@wax-io/atomic-pinner`) and GHCR.
+- Publish to npm (`@waxio/atomic-pinner`) and GHCR.
 - Integration tests against a real Kubo node in CI.
 - Pinning-service API (IPFS Pinning Service spec) provider.
 
