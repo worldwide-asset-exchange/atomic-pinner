@@ -59,7 +59,7 @@
     "docs:check": "tsx scripts/update-docs.ts --check",
     "prettier": "prettier -w .",
     "prettier:check": "prettier -c .",
-    "prepack": "yarn build"
+    "prepack": "npm run build"
   },
   "dependencies": {
     "cli-progress": "^3.12.0",
