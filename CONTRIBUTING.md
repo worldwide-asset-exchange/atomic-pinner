@@ -11,7 +11,8 @@ yarn install
 yarn test:run
 ```
 
-Node.js 20 or newer. The repo uses Yarn 1 with a committed lockfile.
+Node.js 20.19 or newer for development (vitest requires it; the published CLI runs on any Node 20).
+The repo uses Yarn 1 with a committed lockfile.
 
 ## Before you open a pull request
 
