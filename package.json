@@ -1,6 +1,6 @@
 {
   "name": "@waxio/atomic-pinner",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Pin the IPFS content referenced by AtomicAssets NFTs (WAX and other Antelope chains) to Pinata or your own IPFS node, with resumable progress and rate limiting.",
   "license": "MIT",
   "private": false,

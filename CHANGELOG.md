@@ -6,6 +6,17 @@ All notable changes to this project are documented here. The format follows
 
 ## Unreleased
 
+## 0.2.1 - 2026-10-13
+
+### Changed
+
+- The release workflow publishes to npm through trusted publishing (OIDC) instead of a stored
+  token, and the npm job runs in the `npm` GitHub environment so it can require a reviewer.
+- GitHub Actions in the workflows are pinned to commit SHAs.
+- Docker image base is `node:22.22.3-alpine3.22`; the 0.2.0 image build failed on Node 20.18
+  because vitest requires 20.19 or newer.
+- `npm publish` no longer needs `yarn` on the PATH.
+
 ## 0.2.0 - 2026-10-09
 
 First public release, ported from the service WAX runs internally.

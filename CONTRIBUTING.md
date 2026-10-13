@@ -63,6 +63,10 @@ Maintainers bump `package.json`, add the version heading in `CHANGELOG.md`, and 
 tag. The release workflow verifies the tag matches `package.json`, runs the full gate, publishes
 to npm and GHCR, and creates a GitHub release from the changelog section.
 
+npm publishing uses [trusted publishing](https://docs.npmjs.com/trusted-publishers): npmjs.com
+trusts this repository's `release.yml` via OIDC, so no npm token is stored anywhere. The npm job
+runs in the `npm` GitHub environment; a reviewer configured there must approve each publish.
+
 ## Conduct
 
 This project follows the [Contributor Covenant](CODE_OF_CONDUCT.md).
